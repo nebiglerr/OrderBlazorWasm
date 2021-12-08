@@ -1,0 +1,41 @@
+﻿@page "/userlist"
+@inherits UserListProcess
+<h3>UserList</h3>
+
+
+<div class="btn btn-group">
+    <div class="container">
+        <AddNewButtonComponent ButtonName="Create User" OnClick="goCreateUserPage" />
+
+    </div>
+</div>
+@if (userList != null)
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr >
+                <td scope="col">Id</td>
+                <td scope="col">İsim Soyisim</td>
+                <td scope="col">E-Meail</td>
+                <td scope="col">Oluşturulma Tarihi</td>
+                <td scope="col">Durum</td>
+                <td scope="col">#</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in userList)
+            {
+                String spanClass = "badge badge-pill badge-" + (item.IsActive ? "success" : "light");
+            <tr>
+                <td scope="col">@item.Id</td>
+                <td scope="col">@item.FullName</td>
+                <td scope="col">@item.EMailAdress</td>
+                <td scope="col">@item.CreateDate</td>
+                <td scope="col"><span class="@spanClass" >@(item.IsActive ? "Active" :"Passive")</span></td>
+                <td scope="col"><CustomEditButtonComponent IsSmall="true" ButtonName="" IsOutline="true" OnClick="@(()=> goEditUserPage(item.Id))"/></td>
+                <td scope="col"><DeleteButtonComponent IsSmall="true" IsOutline="true" OnClick="@(()=> DeleteUser(item.Id))"/></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

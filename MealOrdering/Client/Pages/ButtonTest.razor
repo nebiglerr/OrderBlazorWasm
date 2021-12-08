@@ -1,0 +1,36 @@
+﻿@page "/buttontest"
+
+<h3>ButtonTest</h3>
+<div class="form-group">
+    <div class="container">
+        <div class="btn-toolbar">
+  
+            <CustomEditButtonCompanent ButtonName="ShowMessage" OnClick="changeTitle" />
+
+            <CustomEditButtonCompanent ButtonName="Edit Caption" OnClick="showConfimation"  Color="danger" Icon="fa fa-pencil" IsSmall="false" ToolTipStr=""/>
+
+            <AddNewButtonComponent/>    
+        </div>
+    </div>
+
+</div>
+@code {
+    [CascadingParameter] public IModalService Modal { get; set; }
+    private String title = "";
+
+    [Inject]
+    ModalManager ModalManager { get; set; }
+
+    private async Task changeTitle()
+    {
+        await ModalManager.ShowMessageAsync("Show Message Title", "Kayıt Silndi",3000);
+        //ModalParameters mParams = new ModalParameters();
+        //mParams.Add("Message","Bu bir test Mesajı");
+        //Modal.Show<ShowMessagePopupComponent>("Counter Popup Page",mParams);
+    }
+    private async Task showConfimation()
+    {
+        var res = await ModalManager.ConfirmationAsync("Confimation", "Are you sure that iy will be deleted ?");
+        if (res) title = "YesClicked"; else title = "No Cliclked";
+    }
+}

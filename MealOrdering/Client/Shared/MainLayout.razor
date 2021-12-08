@@ -1,0 +1,42 @@
+﻿@inherits LayoutComponentBase
+
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="top-row px-4">
+            <a href="http://blazor.net" target="_blank" class="ml-md-auto">@loginStr</a>
+        </div>
+       
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+@code{
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    [Inject]
+    ILocalStorageService LocalStorageService { get; set; }
+    [Inject]
+    NavigationManager NavigationManager { get; set; }
+    private String loginStr = "About";
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            // authState.User.Claims.FirstOrDefault(i => i.ValueType == ClaimsTypes.Email);
+            loginStr = await LocalStorageService.GetItemAsStringAsync("email");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("login");
+        }
+    }
+    
+}
